@@ -33,7 +33,7 @@
             <div class="col-3 mt-5 ml-0" style="border:0px solid green; margin-left:0px">
                 <ul class="list-group chat-scroll">
                     
-                    <li class="list-group-item list-group-item-action"  v-bind:class="[username==users?activeClass:' ']" v-for= "users in users_logged" v-bind:key="users.index" data-toggle="modal"  @click="openPrivateChat(users)">{{users}}</li>
+                    <li class="list-group-item list-group-item-action"  v-bind:class="[username==users?activeClass:' ']" v-for= "users in users_logged" v-bind:key="users" data-toggle="modal"  @click="openPrivateChat(users)">{{users}}</li>
                                    
                 </ul>
             </div>
@@ -121,14 +121,12 @@
                   }      
                        
                 }
-
-                
-                       if (this.private_message.length>0){
-                          
-                           this.sendPrivateMessage();
-                           this.$refs['my-modal'].hide();
-                           this.private_message=''
-                       }
+                if (this.private_message.length>0){
+                    
+                    this.sendPrivateMessage();
+                    this.$refs['my-modal'].hide();
+                    this.private_message=''
+                }
             },
 
             sendMessage: function(){
@@ -239,7 +237,6 @@
                 .listen('PrivateChatEvent', (e) => {
                     console.log('Private'+e.chattingWith.name);
                     if (this.username==e.chattingWith.name){
-                      //  alert('equal' +e.message);
                         this.chat.messages.push({
                         talk:e.message,
                         user:e.user.name,
@@ -264,25 +261,27 @@
                 })
             Echo.join('chat')
                 .here((users) => {
-                   // alert('test');
-
-                   users.map(user =>{
-                       if (user.name!=this.username)
-                        this.users_logged.push(user.name);
-                   });
+                     users.map(user =>{
+                        if (user.name!=this.username){
+                           
+                            this.users_logged.push(user.name);
+                        }
+                    });
                    
-
                     this.logged_in_users=users.length;
                 })
                 .joining((user) => {
-                        this.logged_in_users += 1
-                        this.$toaster.success(user.name+' is joined in the chat section.');
-                      //  console.log(user.name);
+                   
+                    this.users_logged.push(user.name);
+                    this.logged_in_users += 1
+                    this.$toaster.success(user.name+' is joined in the chat section.');
+                     
                 })
                 .leaving((user) => {
-                    //console.log(user.name);
                     this.logged_in_users -= 1
                     this.$toaster.warning(user.name+' is left in the chat section.');
+                    let index=this.users_logged.indexOf(user.name)
+                    this.users_logged.splice(index,1);
             });     
         }
 
