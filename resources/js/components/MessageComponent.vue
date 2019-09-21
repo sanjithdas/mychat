@@ -239,7 +239,7 @@
                     if (this.username==e.chattingWith.name){
                         this.chat.messages.push({
                         talk:e.message,
-                        user:e.user.name,
+                        user:'Private message '+e.user.name,
                         ctime:this.getTime(),
                         color: 'list-group-item-primary'
                        });
