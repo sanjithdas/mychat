@@ -1,3 +1,9 @@
+
+Chat application implemented using laravel , vuejs and pusher broadcasting..
+
+https://nadhammelbourne.com.au/jobs/chat
+
+
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 <p align="center">
